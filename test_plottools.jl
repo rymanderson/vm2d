@@ -1,7 +1,5 @@
 # TEST SINGLE VORTEX RING
-
 include("vm2d.jl")
-
 # create circle geometry
 center = [0.0,0.0,0.0]
 radius = 0.1
@@ -38,11 +36,14 @@ ring2 = vortexring(radius,center.+[0.0,0.0,spacing],refinement,gamma;velocity=ve
 particles = vcat(ring1,ring2)
 
 filename = "test_plottools"
-numtimesteps = 10
+numtimesteps = 2
 timestep = 0.01
 # xs = range(center[1] - 2*radius, stop = center[1] + 2*radius, length = 19)
 # ys = range(center[1] - 2*radius, stop = center[1] + 2*radius, length = 19)
 # zs = [center[3]]
+if ~isdir("./vtk")
+    mkdir("./vtk")
+end
 
 margin = 0.2
 for i in 1:numtimesteps
@@ -81,5 +82,5 @@ for i in 1:numtimesteps
     packVTK(filename, particles::Array{Particle,1}; xs=xs, ys=ys, zs=zs, num=i)
     
     advance(particles,timestep,Uinf)
-    currenttime += timestep
+    # currenttime += timestep
 end

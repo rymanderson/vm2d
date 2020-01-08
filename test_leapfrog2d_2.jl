@@ -36,6 +36,9 @@ for particle in particles
     plt.scatter(particle.x[1],particle.x[2],c=particle.gamma[3])
 end
 plt.title("time: "*string(round(currenttime; digits=3)))
+if ~isdir("./sim")
+    mkdir("./sim")
+end
 # animate
 for i in 1:numtimesteps
     ## advance timestep

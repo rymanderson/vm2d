@@ -24,8 +24,10 @@ name = "vortexrings"
 global currenttime
 currenttime = 0.0
 timestep = 0.01
-numtimesteps = 120 # try 150
-
+numtimesteps = 3 # try 150
+if ~isdir("./sim")
+    mkdir("./sim")
+end
 # animate!
 
 # set up plot
@@ -36,6 +38,9 @@ for particle in particles
     plt.scatter(particle.x[1],particle.x[2],c=particle.gamma[3])
 end
 plt.title("time: "*string(round(currenttime; digits=3)))
+if ~isdir("sim")
+    mkdir("sim")
+end
 # animate
 for i in range(1,length=numtimesteps)
     ## advance timestep

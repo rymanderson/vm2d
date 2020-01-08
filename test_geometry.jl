@@ -32,7 +32,7 @@ name = "vortexrings"
 global currenttime
 currenttime = 0.0
 timestep = 0.01
-numtimesteps = 150
+numtimesteps = 3
 
 # plot
 ## OPTION 1: toggle 2D x-y plot

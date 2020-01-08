@@ -1,6 +1,10 @@
 # TEST SINGLE VORTEX RING
 
 include("vm2d.jl")
+# prepare directories
+if ~isdir("./sim")
+    mkdir("./sim")
+end
 
 # create circle geometry
 center = [0.0,0.0,0.0]
