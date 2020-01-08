@@ -5,12 +5,12 @@ include("vm2d.jl")
 radius1 = 0.1
 radius2 = 0.1
 spacing = 0.05
-points = [[-spacing,radius1,0.0],[-spacing,-radius1,0.0],[0.0,radius2,0.0],[0.0,-radius2,0.0]]
+points = [[radius1,0.0,0.0],[-radius1,0.0,0.0],[radius2,0.0,spacing],[-radius2,0.0,spacing]]
 
 # set vectorial vortex strengths
 gamma = 0.1
-gamma_upper = [0,0,gamma]
-gamma_lower = [0,0,-gamma]
+gamma_upper = [0,gamma,0]
+gamma_lower = [0,-gamma,0]
 gammas = [gamma_upper,gamma_lower,gamma_upper,gamma_lower]
 
 # set initial velocities

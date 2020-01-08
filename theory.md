@@ -50,26 +50,6 @@ $\boldsymbol{\omega}(\mathbf{s},t) = \Gamma \int_L \delta (\mathbf{x} - \mathbf{
 
 Note that __the derivative $\frac{\partial \mathbf{x}_p}{\partial s}$ represents the unit vector in the direction of the vortex filament and moves along its length as the integral is evaluated. It assumes that the vorticity of each differential length _ds_ of the vortex filament is oriented in the direction of its length.__ If the traditional Dirac $\delta(\mathbf{x})$ (evaluates to unity at $\delta(\mathbf{x})$ and zero elsewhere), this is equivalent to saying that the magnitude of vorticity at every point along the vortex filament is equal to the circulation with orientation in the direction of the length. However, if a smoothing function is used in its place which does not evaluate to zero everywhere but $\mathbf{x}=0$, the integral is required to define the now three-dimensional vorticity field, which is no longer zero at points not on the filament.
 
-## Vortex Particles (NEEDS WORK)
-
-The vorticity field is then discretized using a Lagrangian scheme as:
-
-$\boldsymbol{\omega}{\small ({\mathbf{x}},t)} \approx	\sum\limits_p \boldsymbol{\Gamma}_p{\small (t)} \zeta_\sigma {\small ({\bf x} - {\bf x}_p(t))}$
-
-where $\Gamma=\int \vec{\omega} dV_{\text{particle}}\approx \vec{\omega} V$
-
-and $\zeta_\sigma$ is a radial basis function for providing finite volume with radius $\sigma$ and non-infinite vorticity at the particle center. 
-
-Note that the vorticity field is defined by discrete vortex elements (filaments, particles, etc.). The model considers vorticity to be null everywhere else.
-
-First, `vm2d` is implemented using point particles, i.e. $\sigma = 0$. This does imply the possibility of singularities for velocities evaluated at particle centers. This also means that particle collisions will be very unstable. However, this is acceptable for now.
-
-Also of significance,
-
-$\bf v (\bf x) = g_\sigma (\bf x - \bf x_p) (-\frac{\bf x - \bf x_p}{4 \pi \left| \bf x - \bf x_p \right|^3} \times \boldsymbol{\Gamma}_p)$
-
-where $g_\sigma$ is a smoothing function based on $\zeta_\sigma$.
-
 ## Stream Function
 
 The velocity field may be obtained using the stream function according to
@@ -129,15 +109,29 @@ $\mathbf{u} = \nabla \times (\psi \nabla \chi) = \psi \nabla \times \nabla \chi 
 
 $\mathbf{u} = \nabla \psi \times \nabla \chi$
 
-It can be shown that:
+Recall that in 2 dimensions, $\nabla^2 \bf \psi = -\bf \omega$. We now derive an analagous expression in 3 dimensions beginning with the definition of vorticity:
 
-$Q = (\psi_1 - \psi_2)(\chi_1 - \chi_2)$
+$\boldsymbol{\omega} = \nabla \times \mathbf{u}$
+
+Since $\mathbf{u} = \nabla \times \mathbf{A}$, we obtain:
 
 $\nabla \times \nabla \times \mathbf{A} = \boldsymbol{\omega}$
 
+$\nabla \times \nabla \times \psi \nabla \chi = \boldsymbol{\omega}$
+
+Using Identity 10,
+
+$\nabla \cdot \nabla (\psi \nabla \chi) + \nabla(\nabla \cdot (\psi \nabla \chi)) = \boldsymbol{\omega}$
+
 Finally that:
 
-$- \nabla \cdot \nabla(\psi \nabla \chi) + \nabla \nabla \cdot (\psi \nabla \chi) = \boldsymbol{\omega}$
+$- \nabla \cdot \nabla(\psi \nabla \chi) + \nabla [\nabla \cdot (\psi \nabla \chi) ] = \boldsymbol{\omega}$
+
+As an interesting aside, it can be shown that volume flow rate $Q$ bounded by four stream surfaces is:
+
+$Q = (\psi_1 - \psi_2)(\chi_1 - \chi_2)$
+
+
 
 ## Green's Function
 
@@ -219,13 +213,87 @@ Where subscripts $_\sigma$ indicate the value has been regularized. This equatio
 
 $\boldsymbol{\omega_\sigma}(\mathbf{s},t) = \zeta_\sigma * \boldsymbol{\omega}(\mathbf{x},t)$
 
+-----------
 
+Recall that:
+
+$\psi(\boldsymbol x,t) = G(\boldsymbol x) * \boldsymbol \omega(\boldsymbol x,t)$
+
+where $G(\boldsymbol x)$ is Green's function used to solve 
+
+$\zeta_\sigma(\mathbf{x})$ is a function analogous to the Dirac $\delta(\mathbf{x})$ used earlier to evaluate the induced vorticity. Because Green's function used to solve the __ depends on Wincklemann 
+
+## Convergence
+
+SEE PDF PAGE 30 (P 14) OF WINCKLEMANN 1989
 
 ## Circulation $\Gamma$
 
 $\Gamma = \oint_{\circ} \bf V \cdot d \bf l= \oiint_{cs} \boldsymbol{\omega}\cdot \hat{n}dA$
 
 * But how is this done in 3 dimensions? Why/how is $\Gamma = \int \boldsymbol{\omega}dV$ ?
+
+## Vortex Particles
+
+Vortex particles are defined similarly to vortex filaments. Vortex particles are ascribed position $\mathbf{x}$, strength $\boldsymbol{\alpha} = \text{vorticity} \times \text{volume}$, and, if they are regularized, core size $\sigma$.
+
+### Hyperbolic Equations
+
+SEE PDF PAGE 64 WINCKLEMANN 1989, P48
+
+### Non-Regularized
+
+If particles are not regularized, the vorticity field is zero everywhere but the location of $p$ particles. The vorticity induced by a single particle is:
+
+$\boldsymbol{\omega}(\mathbf{x},t) = \boldsymbol{\omega}(t) (\text{volume}) \delta (\mathbf{x} - \mathbf{x_p}) = \boldsymbol{\alpha}(t) \delta (\mathbf{x} - \mathbf{x_p})$
+
+Then the vorticity field is described by:
+
+$\boldsymbol{\omega}(\mathbf{x},t) = \sum \limits_{p} \boldsymbol{\omega}_p$
+
+NOTE: this implies that the product of the vorticity vector and the vanishing volume of the non-regularized particle is equal to the vorticity, or $\boldsymbol{\alpha} = \boldsymbol{\omega}$. ????? WHY ?????
+
+Then, the stream function is evaluated as shown in earlier sections as:
+
+$\psi(\mathbf{x}, t) = G(\mathbf{x}) * \boldsymbol{\omega}(\mathbf{x},t)$
+
+Since Green's function $G$ for a non-regularized vortex particle is
+
+$G(\mathbf{x}) = \frac{1}{4\pi |\mathbf{x}|}$
+
+and the integral of the convolution operation is trivial in the case of a singular particle (since $\sigma = 0$), the stream function is evaluated as:
+
+$\psi(\mathbf{x}, t) = \sum \limits_{p} \frac{1}{4\pi |\mathbf{x}|} \boldsymbol{\alpha}_p(t)$
+
+NOTE: the summation must exclude the particle $p$ if the stream function is to be evaluated at another particle location.
+
+Next, the velocity field is evaluated by taking the curl of the stream function $\psi$:
+
+$\mathbf{u} = \nabla \times \psi(\mathbf{x},t)$
+
+$\mathbf{u} = \nabla \times \sum \limits_{p} \frac{1}{4\pi |\mathbf{x}|} \boldsymbol{\alpha}_p(t)$
+
+
+
+### Regularized (NEEDS WORK!)
+
+The vorticity field is then discretized using a Lagrangian scheme as:
+
+$\boldsymbol{\omega}{\small ({\mathbf{x}},t)} \approx	\sum\limits_p \boldsymbol{\Gamma}_p{\small (t)} \zeta_\sigma {\small ({\bf x} - {\bf x}_p(t))}$
+
+where $\Gamma=\int \vec{\omega} dV_{\text{particle}}\approx \vec{\omega} V$
+
+and $\zeta_\sigma$ is a radial basis function for providing finite volume with radius $\sigma$ and non-infinite vorticity at the particle center. 
+
+Note that the vorticity field is defined by discrete vortex elements (filaments, particles, etc.). The model considers vorticity to be null everywhere else.
+
+First, `vm2d` is implemented using point particles, i.e. $\sigma = 0$. This does imply the possibility of singularities for velocities evaluated at particle centers. This also means that particle collisions will be very unstable. However, this is acceptable for now.
+
+Later, particles are given a smoothing radius:
+
+$\bf v (\bf x) = g_\sigma (\bf x - \bf x_p) (-\frac{\bf x - \bf x_p}{4 \pi \left| \bf x - \bf x_p \right|^3} \times \boldsymbol{\Gamma}_p)$
+
+where $g_\sigma$ is a smoothing function based on $\zeta_\sigma$.
 
 ## Thin Airfoil Theory
 
@@ -245,6 +313,38 @@ We can assume the following:
     * this means a stagnation point will occur at the trailing edge
 
         * which indicates that the vortex strength at the trailing edge must be zero
+
+# Summary
+
+A vortex particle methods employs the following algorithm:
+
+## Non-Regularized Vortex Filament
+
+1. Define vortex filament geometry and circulation
+2. Evaluate the induced vorticity according to:
+
+    > $\boldsymbol{\omega}(\mathbf{s},t) = \Gamma \int_L \delta (\mathbf{x} - \mathbf{x}_p) \frac{\partial \mathbf{x}_p}{\partial s} ds$
+
+3. Evaluate the induced velocity using the stream function according to:
+
+    > $\psi(\mathbf{x},t) = G(\mathbf{x}) * \boldsymbol{\omega}(\mathbf{x},t)$
+
+    > $\mathbf{u}(\mathbf{x}, t) = \nabla \times \psi(\mathbf{x}, t)$
+
+    or,
+
+    > $\mathbf{u}(\mathbf{x}, t) = (\mathbf{K}(\mathbf{x}) \times) * \boldsymbol{\omega}(\mathbf{x}, t)$ 
+    
+    where $\mathbf{K}(\mathbf{x}) \times$ is the Biot-Savart kernel:
+
+    > $\mathbf{K}(\mathbf{x}) \times = -\frac{\mathbf{x}}{4\pi |\mathbf{x}|^3} \times$
+
+4. In the case of a vortex ring, kinematics are propagated by attributing the induced velocity on the center line as the vortex ring velocity.
+
+## Non-Regularized Vortex Particle
+
+1. Define vortex particle locations, radii $\sigma$, and circulations $\Gamma$. Particle strength is defined as $\Gamma \frac{4}{3} \pi \sigma^3$
+2. 
 
 # Project Scope
 
@@ -288,6 +388,8 @@ $\nabla v$ | Vector | Gradient
 8. $\nabla \times (\mathbf{a} \times \mathbf{b}) = \mathbf{a}(\nabla \cdot \mathbf{b}) - \mathbf{b}(\nabla \cdot \mathbf{a}) + (\mathbf{b} \cdot \nabla)\mathbf{a} - (\mathbf{a} \cdot \nabla)\mathbf{b}$
 
 9. $\nabla \times (\psi \mathbf{a}) = \nabla \psi \times \mathbf{a} + \psi\nabla \times \mathbf{a}$ (the curl of the product of a scalar function and a vector function)
+
+10. $\nabla(\nabla \cdot \mathbf{a}) - \nabla \times \nabla \times \mathbf{a} = \nabla \cdot \nabla \mathbf{a}$
 
 ## Key Concepts
 
