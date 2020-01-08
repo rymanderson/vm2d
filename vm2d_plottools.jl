@@ -223,7 +223,7 @@ function packVTK(filename, particles::Array{Particle,1}; xs=Nothing, ys=Nothing,
     point_data = [gammadata, particlevdata]
         
     # generate VTK file for particles
-    generateVTK(filename, points; point_data = point_data, path = "vtk/", num=num)
+    generateVTK(filename, points; point_data = point_data, path = "vtk", num=num)
     
     if xs != Nothing
         # compile velocity field data
@@ -244,7 +244,7 @@ function packVTK(filename, particles::Array{Particle,1}; xs=Nothing, ys=Nothing,
         velocity_data = [velocitydata]
 
         # generate VTK file for velocity field
-        generateVTK(filename*"_velocityfield", velocitycoordinates; point_data = velocity_data, path = "vtk/", num=num)
+        generateVTK(filename*"_velocityfield", velocitycoordinates; point_data = velocity_data, path = "vtk", num=num)
     end
 
     

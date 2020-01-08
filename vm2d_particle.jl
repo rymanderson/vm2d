@@ -25,7 +25,7 @@ end
 
 Calculates the induced velocity produced by the vortex particle argument at the specified location.
 """
-function vinduced(particle::Particle,x::Array{Number,1})
+function vinduced(particle,x)
     r = x .- particle.x
     vinduced = -la.cross(r/4/pi/la.norm(r)^3, particle.gamma)
     
@@ -37,7 +37,7 @@ end
 
 Places vortex particles at the specified locations.
 """
-function place(coordinates::Array{Array{Number,1},1},gammas::Array{Array{Number,1},1},vs::Array{Array{Number,1},1})
+function place(coordinates, gammas, vs)
     particles = Particle[]
     for i = range(1,length=length(coordinates))
         push!(particles,Particle(gammas[i],coordinates[i],vs[i]))
@@ -51,7 +51,7 @@ end
 
 Returns the net velocity induced by the vector of Particles at location x.
 """
-function netv(particles::Array{Particle,1}, x::Array{Number,1}; err::Number = 0.001)
+function netv(particles, x; err = 0.001)
     # find velocity induced at a point due to all vortex particles
     velocity = [0.0, 0.0, 0.0]
     for particle in particles
@@ -70,7 +70,7 @@ end
 
 Calculates induced velocities and advances forward the specified timestep.
 """
-function advance(particles::Array{Particle,1},timestep::Number,Uinf)
+function advance(particles,timestep,Uinf)
     # update velocity of each particle
     for particle in particles
         # yogi = netv(particles, particle.x) .+ Uinf(particle.x)
@@ -101,7 +101,7 @@ Returns six vectors:
     * `vy` defines the Y component of the vorticity-induced velocity at each grid point
     * `vz` defines the Z component of the vorticity-induced velocity at each grid point 
 """
-function vfield(particles::Array{Particle,1},xs, ys, zs)
+function vfield(particles,xs, ys, zs)
     # build grid
     gridx = Number[]
     gridy = Number[]
@@ -146,7 +146,7 @@ Returns six vectors:
     * `gy` defines the Y component of the circulation of each particle
     * `gz` defines the Z component of the circulation of each particle
 """
-function gfield(particles::Array{Particle,1})
+function gfield(particles)
     # set up vectors
     gridx = Number[]
     gridy = Number[]
@@ -172,7 +172,7 @@ end
 
 Returns the particle-induced vorticity at coordinates x.
 """
-function vorticity(particles::Array{Particle,1}, x::Vector{Number})
+function vorticity(particles, x)
     # update velocity of each particle
     for particle in particles
         

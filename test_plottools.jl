@@ -45,7 +45,7 @@ timestep = 0.01
 # zs = [center[3]]
 
 margin = 0.2
-for i in range(1,stop=numtimesteps)
+for i in 1:numtimesteps
     ## advance timestep
     ## evaluate velocity field
     ### get center

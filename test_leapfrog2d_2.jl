@@ -24,7 +24,7 @@ name = "vortexrings"
 global currenttime
 currenttime = 0.0
 timestep = 0.01
-numtimesteps = 120 # try 150
+numtimesteps = 5 # try 150
 
 # animate!
 
@@ -37,7 +37,7 @@ for particle in particles
 end
 plt.title("time: "*string(round(currenttime; digits=3)))
 # animate
-for i in range(1,length=numtimesteps)
+for i in 1:numtimesteps
     ## advance timestep
     advance(particles,timestep,Uinf)
     currenttime += timestep
@@ -49,7 +49,7 @@ for i in range(1,length=numtimesteps)
             length = 11)
     (x,y,z,u,v,w) = vfield(particles, xs, ys, zs)
     ## update plot
-    name = "leapfrog_2d_zx"*string(i)
+    name = "getworking"*string(i)
     plot_2d(particles, "zx"; velocity=true, xs=xs, ys=ys, zs=zs, title="time: "*string(round(currenttime; digits=3)), save=true, name=name)
     # plt.quiver(x,y,u,v)
     plt.pause(0.005)
